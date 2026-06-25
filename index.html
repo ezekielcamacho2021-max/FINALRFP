@@ -234,32 +234,115 @@
     .audio-control i { font-size: 20px; color: var(--revival-blue); }
     .audio-control .status { font-weight: 600; letter-spacing: 0.5px; }
 
-    /* Live Stream Embed */
-    .live-stream-container {
+    /* Live Stream Status Styling */
+    .live-status-container {
       margin-top: 20px;
-      border-radius: 15px;
-      overflow: hidden;
-      background: #000;
-      position: relative;
-      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-      height: 0;
-    }
-    .live-stream-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-    .live-status-message {
-      text-align: center;
       padding: 20px;
-      background: rgba(255, 0, 0, 0.1);
-      border: 1px solid #ff0000;
-      border-radius: 10px;
-      color: #ff6b6b;
+      border-radius: 15px;
+      text-align: center;
+    }
+    .live-status-container.live {
+      background: rgba(255, 0, 0, 0.15);
+      border: 2px solid #ff0000;
+    }
+    .live-status-container.not-live {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .live-status-container .status-icon {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+    .live-status-container .status-text {
+      font-size: 18px;
       font-weight: 600;
+    }
+    .live-status-container .status-subtext {
+      font-size: 14px;
+      color: #aaa;
+      margin-top: 5px;
+    }
+    .live-status-container .watch-live-btn {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 12px 30px;
+      background: #ff0000;
+      color: white;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.3s;
+    }
+    .live-status-container .watch-live-btn:hover {
+      background: var(--golden-hover) !important;
+      color: #0b1120 !important;
+      transform: scale(1.05);
+    }
+    .live-badge {
+      display: inline-block;
+      background: #ff0000;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-left: 10px;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Custom Success Message */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+      background: rgba(255, 215, 0, 0.1);
+      border: 2px solid var(--golden-hover);
+      border-radius: 15px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .form-success.show {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+    .form-success .success-icon {
+      font-size: 64px;
+      color: var(--golden-hover);
+      margin-bottom: 20px;
+    }
+    .form-success h3 {
+      font-size: 28px;
+      color: var(--golden-hover);
+      margin-bottom: 10px;
+    }
+    .form-success p {
+      font-size: 16px;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+    .form-success .btn-back {
+      background: var(--revival-blue);
+      color: white;
+      padding: 12px 35px;
+      border-radius: 50px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 16px;
+    }
+    .form-success .btn-back:hover {
+      background: var(--golden-hover);
+      color: #0b1120;
+      transform: scale(1.05);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @media(max-width:768px){ .hero-content h1 { font-size:40px; } .hero-content h1 .main-title { font-size:35px; } .hero-content p { font-size:14px; } .about { grid-template-columns:1fr; } .about-slide { height:280px; } .section-title { font-size:32px; } nav ul { display:none; } .video-grid { grid-template-columns:1fr; } #home .hero-content { margin-left:5%; max-width:90%; } .scroll-down-indicator { left:20px; bottom:20px; padding:8px 16px; } .give-title { font-size:32px; } .give-section-enhanced { padding:40px 20px; } .audio-control { bottom: 90px; left: 20px; padding: 8px 12px; font-size:12px; } .social-links-row a { min-width: 90px; padding: 6px 12px; font-size: 12px; } }
@@ -345,18 +428,15 @@
 
 <!-- EVENTS -->
 <section id="events"><div class="container"><h2 class="section-title">Upcoming <span class="fire">EVENTS</span></h2><div class="cards">
-  <!-- Daily Radio Program Card with Live Stream Embed -->
+  <!-- Daily Radio Program Card with Live Status -->
   <div class="card" id="daily-radio-program">
     <img src="radio-program.jpg" onerror="this.src='https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=600'">
     <div class="card-content">
       <h3>Daily Radio Program</h3>
       <p>📻 Mon-Sat 2PM-3PM | Sun 1PM-2PM</p>
-      <!-- Live Stream Embed or Status Message -->
-      <div id="live-stream-container" class="live-stream-container">
-        <!-- Iframe will be injected by JavaScript -->
-      </div>
-      <div id="live-status-message" class="live-status-message" style="display: none;">
-        <i class="fas fa-info-circle"></i> No live stream available at the moment. Please check back during our scheduled broadcast times.
+      <!-- Live Status Container - dynamically updated by JavaScript -->
+      <div id="live-status-container" class="live-status-container">
+        <!-- Content will be injected by JavaScript -->
       </div>
     </div>
   </div>
@@ -374,20 +454,87 @@
 <!-- GIVE with Venmo update -->
 <section id="give"><div class="container"><div class="give-section-enhanced"><h2 class="give-title">Support <span class="revival">REVIVAL</span> <span class="fire">FIRE</span> <span class="ph">PH</span></h2><p class="give-subtitle" id="giveText">Your generosity is making an eternal impact in the Philippines and beyond.</p><div class="give-options-enhanced"><div class="give-card-enhanced"><i class="fas fa-credit-card"></i><h3>Online Giving</h3><p>Give securely online using your credit or debit card</p><div class="give-amount-buttons"><span class="amount-btn">₱500</span><span class="amount-btn">₱1,000</span><span class="amount-btn">₱2,500</span><span class="amount-btn">₱5,000</span><span class="amount-btn">Other</span></div><a href="#" class="btn" id="giveOnlineBtn">Give Now</a></div><div class="give-card-enhanced"><div class="payment-logos"><div class="payment-logo gcash">GCash</div><div class="payment-logo paymaya">PayMaya</div><div class="payment-logo paypal">PayPal</div><div class="payment-logo venmo">Venmo</div></div><h3>Mobile & Digital Wallets</h3><p>Send via mobile number or email</p><div style="margin:15px 0;padding:10px;background:rgba(255,255,255,0.05);border-radius:10px;"><p style="font-weight:bold;">🇵🇭 GCash / PayMaya (Philippines)</p><div class="gcash-number">0947-977-6401</div><p style="font-size:12px;">Account: Maria C Gray</p></div><div style="margin:15px 0;padding:10px;background:rgba(255,255,255,0.05);border-radius:10px;"><p style="font-weight:bold;">🌎 PayPal (International)</p><p style="font-size:16px;color:var(--revival-blue);">paypal@revivalfireph.com</p><p style="font-size:12px;">Send to: Revival Fire Philippines</p></div><div style="margin:15px 0;padding:10px;background:rgba(255,255,255,0.05);border-radius:10px;"><p style="font-weight:bold;">🇺🇸 Venmo (US Only)</p><p style="font-size:16px;color:var(--revival-blue);">@mariagray4000</p><p style="font-size:12px;">Send to: Maria Gray</p></div></div><div class="give-card-enhanced"><i class="fas fa-globe"></i><h3>Bank & Money Transfer</h3><p>International & Local Transfers</p><div style="margin:15px 0;padding:10px;background:rgba(255,255,255,0.05);border-radius:10px;"><p style="font-weight:bold;">🏦 BPI Bank (Philippines)</p><p><strong>Account:</strong> 1234-5678-90</p><p><strong>Name:</strong> Revival Fire Philippines</p></div><div style="margin:15px 0;padding:10px;background:rgba(255,255,255,0.05);border-radius:10px;"><p style="font-weight:bold;">📱 Remitly (International)</p><p><strong>Send to:</strong> Maria C Gray</p><p><strong>Country:</strong> Philippines</p><p><strong>Mobile:</strong> 0947-977-6401</p></div><div style="margin:15px 0;padding:10px;background:rgba(255,255,255,0.05);border-radius:10px;"><p style="font-weight:bold;">⚡ Western Union</p><p><strong>Name:</strong> Maria C Gray</p><p><strong>Country:</strong> Philippines</p><p><strong>City:</strong> Virac, Catanduanes</p></div></div></div><div class="give-impact"><div><div class="impact-number">500+</div><div class="impact-label">Lives Touched</div></div><div><div class="impact-number">50+</div><div class="impact-label">Families Supported</div></div><div><div class="impact-number">24/7</div><div class="impact-label">Prayer Coverage</div></div></div><div class="social-links-row"><a href="https://www.facebook.com/REVIVALFIREPH" target="_blank" class="facebook-link"><i class="fab fa-facebook-f"></i> Facebook</a><a href="https://www.youtube.com/@REVIVALFIREPH" target="_blank" class="youtube-link"><i class="fab fa-youtube"></i> YouTube</a><a href="https://x.com/REVIVALFIREPH" target="_blank" class="x-link"><i class="fab fa-x-twitter"></i> X (Twitter)</a><a href="https://www.instagram.com/revivalfirephilippines2026" target="_blank" class="instagram-link"><i class="fab fa-instagram"></i> Instagram</a><a href="https://www.tiktok.com/@revivalfirephilippines" target="_blank" class="tiktok-link"><i class="fab fa-tiktok"></i> TikTok</a></div></div></div></section>
 
-<!-- CONTACT - Form now uses Formspree to send emails reliably -->
+<!-- CONTACT - Form now uses AJAX to stay on page -->
 <section id="contact"><div class="container"><h2 class="section-title">Contact <span class="revival">Us</span> <span class="ph">Philippines</span></h2><div class="contact-info"><div class="contact-card"><i class="fas fa-map-marker-alt"></i><h3>Address</h3><p>Zamora Street, Purok 1 Gogon Centro<br>Virac, Catanduanes 4800</p></div><div class="contact-card"><i class="fas fa-phone-alt"></i><h3>Phone</h3><p>0947-977-6401<br>Maria C Gray</p></div><div class="contact-card"><i class="fas fa-envelope"></i><h3>Email</h3><p><a href="mailto:revivalfirephilippines@gmail.com">revivalfirephilippines@gmail.com</a></p></div></div>
-<!-- Form now uses Formspree to send emails -->
-<form id="contactForm" action="https://formspree.io/f/mojojogo" method="POST">
-  <input type="text" name="name" placeholder="Your Name" required>
-  <input type="email" name="email" placeholder="Your Email" required>
-  <textarea name="message" rows="6" placeholder="Prayer Request or Message" required></textarea>
-  <button type="submit">Send Message</button>
-</form>
+  
+<!-- Form with AJAX handling -->
+<div id="form-container">
+  <form id="contactForm" action="https://formspree.io/f/mojojogo" method="POST">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <textarea name="message" rows="6" placeholder="Prayer Request or Message" required></textarea>
+    <button type="submit" id="submitBtn">Send Message</button>
+  </form>
+  
+  <!-- Custom Success Message -->
+  <div id="form-success" class="form-success">
+    <div class="success-icon">✅</div>
+    <h3>Thanks!</h3>
+    <p>The message was submitted successfully</p>
+    <button class="btn-back" onclick="resetForm()">Go back</button>
+  </div>
+</div>
+
 <div class="social-links-row"><a href="https://www.facebook.com/REVIVALFIREPH" target="_blank" class="facebook-link"><i class="fab fa-facebook-f"></i> Facebook</a><a href="https://www.youtube.com/@REVIVALFIREPH" target="_blank" class="youtube-link"><i class="fab fa-youtube"></i> YouTube</a><a href="https://x.com/REVIVALFIREPH" target="_blank" class="x-link"><i class="fab fa-x-twitter"></i> X (Twitter)</a><a href="https://www.instagram.com/revivalfirephilippines2026" target="_blank" class="instagram-link"><i class="fab fa-instagram"></i> Instagram</a><a href="https://www.tiktok.com/@revivalfirephilippines" target="_blank" class="tiktok-link"><i class="fab fa-tiktok"></i> TikTok</a></div></div></section>
 
 <footer><h3><span class="revival">REVIVAL</span> <span class="fire">FIRE</span> <span class="ph">PHILIPPINES</span></h3><p>"Reviving Hearts. Transforming Lives. Advancing God's Kingdom."</p><br><p>📍 Zamora Street, Purok 1 Gogon Centro, Virac, Catanduanes 4800</p><p>📞 0947-977-6401 | ✉️ revivalfirephilippines@gmail.com</p><div class="social-links-row"><a href="https://www.facebook.com/REVIVALFIREPH" target="_blank" class="facebook-link"><i class="fab fa-facebook-f"></i> Facebook</a><a href="https://www.youtube.com/@REVIVALFIREPH" target="_blank" class="youtube-link"><i class="fab fa-youtube"></i> YouTube</a><a href="https://x.com/REVIVALFIREPH" target="_blank" class="x-link"><i class="fab fa-x-twitter"></i> X (Twitter)</a><a href="https://www.instagram.com/revivalfirephilippines2026" target="_blank" class="instagram-link"><i class="fab fa-instagram"></i> Instagram</a><a href="https://www.tiktok.com/@revivalfirephilippines" target="_blank" class="tiktok-link"><i class="fab fa-tiktok"></i> TikTok</a></div><p>© 2026 Revival Fire Philippines. All Rights Reserved.</p></footer>
 
 <script>
+// ============ FORM HANDLING WITH AJAX ============
+document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const form = this;
+  const submitBtn = document.getElementById('submitBtn');
+  const formData = new FormData(form);
+  
+  // Disable button and show loading state
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending...';
+  
+  fetch(form.action, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  .then(response => {
+    if (response.ok) {
+      // Hide form, show success message
+      form.style.display = 'none';
+      document.getElementById('form-success').classList.add('show');
+    } else {
+      alert('Oops! There was a problem sending your message. Please try again.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Message';
+    }
+  })
+  .catch(error => {
+    alert('Oops! There was a problem sending your message. Please try again.');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Send Message';
+  });
+});
+
+// Reset function to show form again
+function resetForm() {
+  const form = document.getElementById('contactForm');
+  const successMsg = document.getElementById('form-success');
+  
+  // Hide success message
+  successMsg.classList.remove('show');
+  
+  // Reset and show form
+  form.reset();
+  form.style.display = 'block';
+  
+  // Reset button
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Send Message';
+}
+
 // ============ SLIDESHOWS ============
 const slideshow1Images = ["revival1.jpg","revival2.jpg","revival3.jpg","revival4.jpg","revival5.jpg"];
 const slideshow2Images = ["revival6.jpg","revival7.jpg","revival8.jpg","revival9.jpg","revival10.jpg"];
@@ -443,43 +590,66 @@ if(aboutSlides.length && aboutDots) {
   },4000);
 }
 
-// ============ LIVE STREAM FUNCTIONALITY ============
-function checkAndDisplayLiveStream() {
-  const container = document.getElementById('live-stream-container');
-  const statusMsg = document.getElementById('live-status-message');
+// ============ LIVE STREAM SCHEDULE CHECK ============
+function updateLiveStatus() {
+  const container = document.getElementById('live-status-container');
   if (!container) return;
 
-  // The Oragon Facebook page ID
-  const pageId = '100063935028819';
-  // Attempt to get the live video embed URL from Facebook's oEmbed or direct embed
-  // We'll try to embed the page's live video using a generic Facebook embed
-  // Note: Facebook's live video embed requires the specific video ID, which is not easily accessible.
-  // As a fallback, we'll show a message that the live stream is not available.
-  // For a more robust solution, you would need to use the Facebook Graph API to check for live videos.
+  // Get current time
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+  const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+  
+  // Broadcast schedule
+  // Mon-Sat: 2PM-3PM (14:00-15:00)
+  // Sun: 1PM-2PM (13:00-14:00)
+  let isScheduledTime = false;
+  let scheduleText = '';
+  
+  if (currentDay === 0) { // Sunday
+    // Sunday: 1PM-2PM
+    if (currentHour === 13 && currentMinute >= 0 && currentMinute < 60) {
+      isScheduledTime = true;
+    }
+    scheduleText = 'Sunday 1PM-2PM';
+  } else if (currentDay >= 1 && currentDay <= 6) { // Monday to Saturday
+    // Mon-Sat: 2PM-3PM
+    if (currentHour === 14 && currentMinute >= 0 && currentMinute < 60) {
+      isScheduledTime = true;
+    }
+    scheduleText = 'Mon-Sat 2PM-3PM';
+  }
 
-  // For now, we'll show a message that the live stream is not active.
-  // This is a placeholder for the real live stream embed.
-  // When a live video is available, you would replace the iframe src with the live video embed URL.
-  // Example: https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/100063935028819/videos/&show_text=0&width=560
-
-  // Clear container
-  container.innerHTML = '';
-
-  // Show a message that no live stream is available
-  // You can replace this with actual live stream detection logic.
-  // For now, we'll display the message and hide the container.
-  statusMsg.style.display = 'block';
-  container.style.display = 'none';
-
-  // To actually embed a live stream, you would need to fetch the live video ID from Facebook's API.
-  // This is a complex process that requires server-side logic.
-  // As an alternative, you could use the Facebook Page Plugin to show posts, but it won't specifically show live video.
+  // If it's scheduled time, show the "Watch Live" button
+  if (isScheduledTime) {
+    container.className = 'live-status-container live';
+    container.innerHTML = `
+      <div class="status-icon">🔴</div>
+      <div class="status-text">
+        LIVE NOW <span class="live-badge">LIVE</span>
+      </div>
+      <div class="status-subtext">We're currently broadcasting on our radio program!</div>
+      <a href="https://www.facebook.com/profile.php?id=100063935028819" target="_blank" class="watch-live-btn">
+        <i class="fas fa-play"></i> Watch Live on Facebook
+      </a>
+      <div class="status-subtext" style="margin-top: 10px; font-size: 12px;">
+        📻 ${scheduleText}
+      </div>
+    `;
+  } else {
+    // Not scheduled time - show "No live stream" message
+    container.className = 'live-status-container not-live';
+    container.innerHTML = `
+      <div class="status-icon">📻</div>
+      <div class="status-text">No Live Stream Available</div>
+      <div class="status-subtext">Our next broadcast is scheduled for ${scheduleText || 'Mon-Sat 2PM-3PM | Sun 1PM-2PM'}</div>
+      <div class="status-subtext" style="margin-top: 5px; font-size: 12px; color: #666;">
+        Check back during our broadcast hours
+      </div>
+    `;
+  }
 }
-
-// Call the function when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-  checkAndDisplayLiveStream();
-});
 
 // ============ AUDIO NARRATION (NO LOOP) ============
 const script = [
@@ -576,6 +746,13 @@ window.addEventListener('load', function() {
   const firstHero = document.getElementById('heroContent1');
   if (firstHero) firstHero.classList.add('visible');
   if (window.speechSynthesis) window.speechSynthesis.getVoices();
+  
+  // Update live status on load
+  updateLiveStatus();
+  
+  // Update live status every minute
+  setInterval(updateLiveStatus, 60000);
+  
   setTimeout(() => {
     playChime();
     setTimeout(playNextNarration, 400);
@@ -645,40 +822,6 @@ function scrollToNextSection() {
   }
 }
 document.getElementById('scrollDownBtn').addEventListener('click', scrollToNextSection);
-
-// Contact form submission handling - now uses Formspree
-document.getElementById('contactForm')?.addEventListener('submit', function(e) {
-  // Let the form submit normally to Formspree
-  // We'll show a success message after submission
-  // The form will redirect to Formspree's thank you page
-  // No need to prevent default for standard form submission
-  // We'll just show a quick confirmation
-  setTimeout(() => {
-    // This will run after the form submits
-    // But since the page redirects, we might not see it
-    // So we'll use a different approach - intercept the submission
-    e.preventDefault();
-    const form = this;
-    const formData = new FormData(form);
-    
-    fetch(form.action, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'Accept': 'application/json'
-      }
-    }).then(response => {
-      if (response.ok) {
-        alert('Thank you for your message! We will pray for you and respond shortly.');
-        form.reset();
-      } else {
-        alert('Oops! There was a problem sending your message. Please try again.');
-      }
-    }).catch(error => {
-      alert('Oops! There was a problem sending your message. Please try again.');
-    });
-  }, 100);
-});
 
 document.getElementById('giveOnlineBtn')?.addEventListener('click', function(e) {
   e.preventDefault();
